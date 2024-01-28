@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактировать</title>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/group/edit/{id}(id=${group.getId_group()})}" th:object="${group}">
+    <label for="title">Название: </label>
+    <input type="text" th:field="*{title}" id="title">
+    <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+    <br>
+    <label for="course">Курс: </label>
+    <input type="text" th:field="*{course}" id="course">
+    <div style="color:red" th:if="${#fields.hasErrors('course')}" th:errors="*{course}">Course error</div>
+    <br>
+
+    <input type="submit" value="Редактировать!">
+</form>
+
+</body>
+</html>

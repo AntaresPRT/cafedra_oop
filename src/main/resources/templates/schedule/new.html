@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+</head>
+<body>
+
+
+<form th:method="POST" th:action="@{/schedule}" th:object="${schedule}">
+    <label for="start_time">Начало занятия: </label>
+    <input type="text" th:field="*{start_time}" id="start_time">
+    <div style="color:red" th:if="${#fields.hasErrors('start_time')}" th:errors="*{start_time}">Start time error</div>
+    <br>
+    <label for="end_time">Конец занятия: </label>
+    <input type="text" th:field="*{end_time}" id="end_time">
+    <div style="color:red" th:if="${#fields.hasErrors('end_time')}" th:errors="*{end_time}">End time error</div>
+    <br>
+    <label for="datepicker">Дата: </label>
+    <input type="text" th:field="*{date}" id="datepicker">
+    <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date error</div>
+    <br>
+    <label for="audience">Аудитория: </label>
+    <select id="audience" th:field="*{audience}">
+        <option value="">Выберите аудиторию</option>
+        <!-- Здесь нужно заполнить опции (options) должностями из базы данных -->
+        <option th:each="audience : ${audiences}" th:value="${audience.getId_audience()}" th:text="${audience.getNumber()}"></option>
+    </select>
+    <br>
+    <label for="employee">Преподаватель: </label>
+    <select id="employee" th:field="*{employee}">
+        <option value="">Выберите преподавателя</option>
+        <!-- Здесь нужно заполнить опции (options) должностями из базы данных -->
+        <option th:each="employee : ${employees}" th:value="${employee.getEmployee_id()}" th:text="${employee.getLast_name() + ' ' + employee.getFirst_name() + ' ' + employee.getPatronymic()}"></option>
+    </select>
+    <br>
+    <label for="group">Группа: </label>
+    <select id="group" th:field="*{group}">
+        <option value="">Выберите группу</option>
+        <option th:each="group : ${groups}" th:value="${group.getId_group()}" th:text="${group.getTitle()}"></option>
+    </select>
+    <br>
+    <label for="course">Предмет: </label>
+    <select id="course" th:field="*{course}">
+        <option value="">Выберите предмет</option>
+        <option th:each="course : ${courses}" th:value="${course.getId_course()}" th:text="${course.getTitle()}"></option>
+    </select>
+
+    <input type="submit" value="Добавить!">
+</form>
+
+<script>
+    $( function() {
+        $( "#datepicker" ).datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    } );
+</script>
+</body>
+</html>

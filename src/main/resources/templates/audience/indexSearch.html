@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Аудитории</title>
+  <link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+<form action="#" th:action="@{audience/searchAudience}" method="GET">
+    <label for="searchInput">Поиск аудитории:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите номер аудитории">
+    <input type="submit" value="Найти">
+</form>
+
+<h1>Список аудиторий</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Номер аудитории</th>
+        <th>Вместимость</th>
+        <th>Тип</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="audience : ${audiences}">
+        <td th:text="${audience.getId_audience()}">1</td>
+        <td th:text="${audience.getNumber()}">Номер</td>
+        <td th:text="${audience.getCapacity()}">Вместимость</td>
+        <td th:text="${audience.getType()}">Тип</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/audience/edit/{id}(id=${audience.getId_audience()})}"
+                th:text="Редактировать">audience</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/audience/{id}(id=${audience.getId_audience()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/audience/new">Добавить новую аудиторию</a>
+<br>
+<a href="/hello">Назад</a>
+</body>
+</html>

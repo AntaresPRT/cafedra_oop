@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+</head>
+<body>
+<form action="#" th:action="@{/group/searchGroup}" method="GET">
+    <label for="searchInput">Поиск группы:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите название группы">
+    <input type="submit" value="Найти">
+</form>
+
+<h1>Список групп</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Название</th>
+        <th>Курс</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="group : ${groups}">
+        <td th:text="${group.getId_group()}">1</td>
+        <td th:text="${group.getTitle()}">Название</td>
+        <td th:text="${group.getCourse()}">Курс</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/group/edit/{id}(id=${group.getId_group()})}"
+                th:text="Редактировать">group</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/group/{id}(id=${group.getId_group()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/group/new">Добавить новую группу</a>
+<br>
+<button id="downloadGroupCountsBtn2">Скачать встречаемость групп</button>
+<br>
+<a href="/hello">Назад</a>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('downloadGroupCountsBtn2').addEventListener('click', downloadGroupCounts);
+    });
+
+    function downloadGroupCounts() {
+        const table = document.getElementById('tableSchedule');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        const groupCounts = {};
+
+        rows.forEach(row => {
+            const groupCell = row.querySelector('td:nth-child(8)'); // 8th cell contains group info
+            if (groupCell) {
+                const groupName = groupCell.textContent.trim();
+                if (groupName in groupCounts) {
+                    groupCounts[groupName]++;
+                } else {
+                    groupCounts[groupName] = 1;
+                }
+            }
+        });
+
+        let content = 'Группа\tКоличество\n';
+
+        Object.keys(groupCounts).forEach(group => {
+            content += `${group}\t${groupCounts[group]}\n`;
+        });
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const downloadLink = document.createElement('a');
+        downloadLink.download = 'group_counts.txt';
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+</script>
+</html>

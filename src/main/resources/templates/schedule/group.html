@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Группы</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+<form action="#" th:action="@{/schedule/searchGroup}" method="GET">
+    <label for="searchInput">Поиск группы:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите название группы">
+    <input type="submit" value="Найти">
+</form>
+
+<div th:each="group : ${groups}">
+    <a th:href="@{/schedule/group/{id}(id=${group.getId_group()})}"
+       th:text="${ group.getTitle() + ' Курс: ' + group.getCourse()}">group</a>
+</div>
+
+</body>
+
+</html>

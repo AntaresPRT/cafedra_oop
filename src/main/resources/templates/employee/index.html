@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+<form action="#" th:action="@{/employee/searchEmployee}" method="GET">
+    <label for="searchInput">Поиск преподавателя:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите ФИО: ">
+    <input type="submit" value="Найти">
+</form>
+<h1>Список работников</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+        <th>Должность</th>
+        <th>Дата контракта</th>
+        <th>Опыт работы</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.getEmployee_id()}">1</td>
+        <td th:text="${employee.getLast_name()}">Фамилия</td>
+        <td th:text="${employee.getFirst_name()}">Имя</td>
+        <td th:text="${employee.getPatronymic()}">Отчество</td>
+        <td th:text="${employee.getPosition().getTitle()}">Должность</td>
+        <td th:text="${employee.getContract_date()}">Дата контракта</td>
+        <td th:text="${employee.getExperience()}">Опыт работы</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/employee/edit/{id}(id=${employee.getEmployee_id()})}"
+                th:text="Редактировать">employee</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/employee/{id}(id=${employee.getEmployee_id()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/employee/new">Добавить нового сотрудника</a>
+<br>
+<a href="/hello">Назад</a>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Преподаватели</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+<form action="#" th:action="@{/schedule/searchEmployee}" method="GET">
+    <label for="searchInput">Поиск преподавателя:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите ФИО: ">
+    <input type="submit" value="Найти">
+</form>
+
+<div th:each="employee : ${employees}">
+    <a th:href="@{/schedule/employee/{id}(id=${employee.getEmployee_id()})}"
+       th:text="${ employee.last_name + ' : ' + employee.getFirst_name() + ' : ' + employee.getPatronymic()}">employee</a>
+</div>
+
+</body>
+</html>

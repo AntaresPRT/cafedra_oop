@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+<h1>Список курсов</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Название</th>
+        <th>Часов</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.getId_course()}">1</td>
+        <td th:text="${course.getTitle()}">Название</td>
+        <td th:text="${course.getHours()}">Часов</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/course/edit/{id}(id=${course.getId_course()})}"
+                th:text="Редактировать">course</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/course/{id}(id=${course.getId_course()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/course/new">Добавить новый курс</a>
+<br>
+<a href="/hello">Назад</a>
+</body>
+</html>

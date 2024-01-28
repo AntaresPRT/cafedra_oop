@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Аудитории</title>
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+<form action="#" th:action="@{/schedule/searchAudience}" method="GET">
+  <label for="searchInput">Поиск аудитории:</label>
+  <input type="text" id="searchInput" name="search" placeholder="Введите номер аудитории">
+  <input type="submit" value="Найти">
+</form>
+
+<div th:each="audience : ${audiences}">
+  <a th:href="@{/schedule/audience/{id}(id=${audience.getId_audience()})}"
+     th:text="${'Аудитория: ' + audience.getNumber() + ' Тип: ' + audience.getType()}">group</a>
+</div>
+
+</body>
+</html>

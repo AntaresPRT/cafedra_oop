@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Расписание</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+</head>
+<body>
+<table>
+    <tbody>
+    <tr>
+        <td>
+            <form th:method="GET" th:action="@{/schedule/group}">
+                <input type="submit" value="По группам"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="GET" th:action="@{/schedule/audience}">
+                <input type="submit" value="По аудиториям"/>
+            </form>
+        </td>
+        <td>
+            <form th:method="GET" th:action="@{/schedule/employee}">
+                <input type="submit" value="По преподавателям"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<div class="container">
+    <form th:method="GET" th:action="@{/schedule/byDate/from}">
+        <label for="datepicker">Выберите дату от:</label>
+        <input type="text" id="datepicker" name="selectedFromDate">
+        <label for="datepicker2">Выберите дату до:</label>
+        <input type="text" id="datepicker2" name="selectedToDate">
+        <input type="submit" value="Показать расписание">
+    </form>
+    <h1>Расписание занятий</h1>
+    <table border="1" id="tableSchedule" class="table">
+        <thead>
+        <tr>
+            <th>Ид</th>
+            <th>День недели</th>
+            <th>Курс</th>
+            <th>Начало пары</th>
+            <th>Конец пары</th>
+            <th>Аудитория</th>
+            <th>Преподаватель</th>
+            <th>Группа</th>
+            <th>Дата</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="schedule : ${schedules}">
+            <td th:text="${schedule.getId_schedule()}">1</td>
+            <td th:text="${schedule.getDay_of_week()}">День недели</td>
+            <td th:text="${schedule.getCourse().getTitle()}">Курс</td>
+            <td th:text="${schedule.getStart_time()}">Начало</td>
+            <td th:text="${schedule.getEnd_time()}">Конец</td>
+            <td th:text="${schedule.getAudience().getNumber()}">Аудитория</td>
+            <td th:text="${schedule.getEmployee().getLast_name() + ' ' + schedule.getEmployee().getFirst_name() + ' ' + schedule.getEmployee().getPatronymic()}">Преподаватель</td>
+            <td th:text="${schedule.getGroup().getTitle()}">Группа</td>
+            <td th:text="${schedule.getDate()}">Дата</td>
+            <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/schedule/edit/{id}(id=${schedule.getId_schedule()})}"
+                    th:text="Редактировать">schedule</a></td>
+            <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/schedule/{id}(id=${schedule.getId_schedule()})}">
+                <input type="submit" value="Удалить"/>
+            </form></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <br/>
+
+    <a href="/schedule/new">Добавить расписание</a>
+    <br>
+    <button id="downloadBtn">Скачать расписание</button>
+    <br>
+    <button id="downloadGroupCountsBtn">Скачать встречаемость групп</button>
+    <br>
+    <a href="/hello">Назад</a>
+
+</div>
+<script>
+    $( function() {
+        $( "#datepicker" ).datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+        $( "#datepicker2" ).datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    } );
+
+    function downloadSchedule() {
+        const table = document.getElementById('tableSchedule');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        let content = 'Ид\tДень недели\tКурс\tНачало пары\tКонец пары\tАудитория\tПреподаватель\tГруппа\tДата\n';
+
+        rows.forEach(row => {
+            const columns = Array.from(row.querySelectorAll('td'));
+            columns.forEach((column, index) => {
+                if (index !== columns.length - 1) {
+                    content += column.textContent.trim() + '\t';
+                } else {
+                    content += column.textContent.trim() + '\n';
+                }
+            });
+        });
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const downloadLink = document.createElement('a');
+        downloadLink.download = 'schedule.txt';
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('downloadBtn').addEventListener('click', downloadSchedule);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('downloadGroupCountsBtn').addEventListener('click', downloadGroupCounts);
+    });
+
+    function downloadGroupCounts() {
+        const table = document.getElementById('tableSchedule');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        const groupCounts = {};
+
+        rows.forEach(row => {
+            const groupCell = row.querySelector('td:nth-child(8)'); // 8th cell contains group info
+            if (groupCell) {
+                const groupName = groupCell.textContent.trim();
+                if (groupName in groupCounts) {
+                    groupCounts[groupName]++;
+                } else {
+                    groupCounts[groupName] = 1;
+                }
+            }
+        });
+
+        let content = 'Группа\tКоличество\n';
+
+        Object.keys(groupCounts).forEach(group => {
+            content += `${group}\t${groupCounts[group]}\n`;
+        });
+
+        const blob = new Blob([content], { type: 'text/plain' });
+        const downloadLink = document.createElement('a');
+        downloadLink.download = 'group_counts.txt';
+        downloadLink.href = window.URL.createObjectURL(blob);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+
+</script>
+
+</body>
+</html>

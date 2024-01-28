@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление новой аудитории</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+
+<form th:method="POST" th:action="@{/audience}" th:object="${audience}">
+    <label for="number">Номер: </label>
+    <input type="text" th:field="*{number}" id="number">
+    <div style="color:red" th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number error</div>
+    <br>
+    <label for="capacity">Вместимость: </label>
+    <input type="text" th:field="*{capacity}" id="capacity">
+    <div style="color:red" th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}">Capacity error</div>
+    <br>
+    <label for="type">Тип: </label>
+    <input type="text" th:field="*{type}" id="type">
+    <div style="color:red" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Type error</div>
+    <br>
+
+    <input type="submit" value="Добавить!">
+</form>
+
+</body>
+</html>

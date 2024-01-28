@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового сотрудника</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/course}" th:object="${course}">
+    <label for="title">Название: </label>
+    <input type="text" th:field="*{title}" id="title">
+    <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+    <br>
+    <label for="hours">Часов: </label>
+    <input type="text" th:field="*{hours}" id="hours">
+    <div style="color:red" th:if="${#fields.hasErrors('hours')}" th:errors="*{hours}">Hours error</div>
+    <br>
+
+    <input type="submit" value="Добавить!">
+</form>
+
+</body>
+</html>

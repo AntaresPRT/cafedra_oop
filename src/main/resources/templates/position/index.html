@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+<h1>Список должностей</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Название</th>
+        <th>Зарплата</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="position : ${positions}">
+        <td th:text="${position.getId_position()}">1</td>
+        <td th:text="${position.getTitle()}">Название</td>
+        <td th:text="${position.getSalary()}">Зарплата</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/position/edit/{id}(id=${position.getId_position()})}"
+                th:text="Редактировать">position</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/position/{id}(id=${position.getId_position()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/position/new">Добавить новую должность</a>
+<br>
+<a href="/hello">Назад</a>
+</body>
+</html>

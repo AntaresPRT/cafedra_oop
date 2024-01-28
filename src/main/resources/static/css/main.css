@@ -1,0 +1,116 @@
+/* Стили для таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: center;
+}
+
+label, td {
+    color: #f5f5f5;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+/* Стили для кнопок */
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Стили для ссылок */
+a {
+    display: inline-block;
+    padding: 8px 16px;
+    margin: 4px 8px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+.container-main a {
+    display: block;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+
+
+a:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для поля выбора даты */
+#datepicker,#datepicker2, #searchInput {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #352F44;
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.container-main {
+    max-width: 400px; /* Примерное значение ширины контейнера */
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 50px; /* Примерное значение отступа сверху */
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #f5f5f5;
+}
+
+#ui-datepicker-div {
+    width: 300px;
+}
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
+    max-height: 0.9em;
+}

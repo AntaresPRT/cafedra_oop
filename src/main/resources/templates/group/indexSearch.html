@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+</head>
+<body>
+<form action="#" th:action="@{/group/searchGroup}" method="GET">
+    <label for="searchInput">Поиск группы:</label>
+    <input type="text" id="searchInput" name="search" placeholder="Введите название группы">
+    <input type="submit" value="Найти">
+</form>
+
+<h1>Список групп</h1>
+<table border="1" id="tableEmployee">
+    <thead>
+    <tr>
+        <th>Ид</th>
+        <th>Название</th>
+        <th>Курс</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="group : ${groups}">
+        <td th:text="${group.getId_group()}">1</td>
+        <td th:text="${group.getTitle()}">Название</td>
+        <td th:text="${group.getCourse()}">Курс</td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"> <a th:href="@{/group/edit/{id}(id=${group.getId_group()})}"
+                th:text="Редактировать">group</a></td>
+        <td th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><form th:method="DELETE" th:action="@{/group/{id}(id=${group.getId_group()})}">
+            <input type="submit" value="Удалить"/>
+        </form></td>
+    </tr>
+    </tbody>
+</table>
+
+<br/>
+<hr/>
+
+<a th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" href="/group/new">Добавить новую группу</a>
+<br>
+<a href="/hello">Назад</a>
+</body>
+</html>

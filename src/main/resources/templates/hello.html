@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <title>Hello</title>
+</head>
+<body>
+<div class="container-main">
+    <h1>Информационная система "Кафедра"</h1>
+<a href="/employee">Список сотрудников</a>
+<br>
+<a href="/schedule">Просмотреть расписание</a>
+<br>
+<a href="/audience">Просмотреть аудитории</a>
+<br>
+<a href="/course">Просмотреть курсы</a>
+<br>
+<a href="/group">Список групп</a>
+<br>
+<a href="/position">Список должностей</a>
+<br>
+<form th:action="@{/logout}" th:method="post">
+    <input type="submit" value="Logout">
+</form>
+</div>
+</body>
+</html>

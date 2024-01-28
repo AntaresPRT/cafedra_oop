@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового сотрудника</title>
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/employee}" th:object="${employee}">
+    <label for="last_name">Фамилия: </label>
+    <input type="text" th:field="*{last_name}" id="last_name">
+    <div style="color:red" th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}">Last name error</div>
+    <br>
+    <label for="first_name">Имя: </label>
+    <input type="text" th:field="*{first_name}" id="first_name">
+    <div style="color:red" th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}">First name error</div>
+    <br>
+    <label for="patronymic">Отчество: </label>
+    <input type="text" th:field="*{patronymic}" id="patronymic">
+    <div style="color:red" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Patronymic error</div>
+    <br>
+    <label for="contract_date">Дата заключения контракта: </label>
+    <input type="text" th:field="*{contract_date}" id="contract_date">
+    <div style="color:red" th:if="${#fields.hasErrors('contract_date')}" th:errors="*{contract_date}">Contract date error</div>
+    <br>
+    <label for="experience">Опыт работы: </label>
+    <input type="text" th:field="*{experience}" id="experience">
+    <div style="color:red" th:if="${#fields.hasErrors('experience')}" th:errors="*{experience}">Experience error</div>
+    <br>
+    <label for="position">Должность: </label>
+    <select id="position" th:field="*{position}">
+        <option value="">Выберите должность</option>
+        <!-- Здесь нужно заполнить опции (options) должностями из базы данных -->
+        <option th:each="position : ${positions}" th:value="${position.getId_position()}" th:text="${position.getTitle()}"></option>
+    </select>
+
+    <input type="submit" value="Добавить!">
+</form>
+
+</body>
+</html>
